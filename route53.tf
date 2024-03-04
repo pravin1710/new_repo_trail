@@ -4,7 +4,7 @@
 
 resource "aws_route53_record" "service_record" {
   zone_id = var.route53_zone_id
-  name    = "calander.us-east-1.api.stagingleadsigma.com"
+  name    = "service-1"
   type    = "A"
   alias {
     name                   = aws_alb.application_load_balancer.dns_name

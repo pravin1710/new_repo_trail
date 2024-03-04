@@ -41,6 +41,6 @@ variable "availability_zones" {
 variable "route53_zone_id" {
   type = string
   description = "List of private subnets"
-  default = "Z00720392J3FWBMEHGJQ1"  
+  default = "Z06759503NSIF41NMOOLD"  
 }
 
