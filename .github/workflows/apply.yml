@@ -79,8 +79,8 @@ jobs:
       - name: Terraform Init
         id: init
         env:
-          AWS_BUCKET_NAME: mybuckflow
-          AWS_BUCKET_KEY_NAME: stateterraform_state.tfstate
+          AWS_BUCKET_NAME: "mybuckflow"
+          AWS_BUCKET_KEY_NAME: "stateterraform_state.tfstate"
         run: terraform init 
 
       - name: Terraform Validate
