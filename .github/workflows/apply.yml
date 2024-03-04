@@ -30,11 +30,11 @@ jobs:
 
             backend "s3" {
 
-            bucket  =  ${{ secrets.AWS_S3_BUCKET }}
+            bucket  =  mybuckflow
 
             encrypt = true
 
-            key 	= ${{ secrets.AWS_S3_KEY }}
+            key 	= stateterraform_state.tfstate
 
             region  = ap-south-1
 
@@ -79,8 +79,8 @@ jobs:
       - name: Terraform Init
         id: init
         env:
-          AWS_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET }}
-          AWS_BUCKET_KEY_NAME: ${{ secrets.AWS_S3_KEY }}
+          AWS_BUCKET_NAME: mybuckflow
+          AWS_BUCKET_KEY_NAME: stateterraform_state.tfstate
         run: terraform init 
 
       - name: Terraform Validate
