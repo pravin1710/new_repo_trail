@@ -2,7 +2,7 @@
 variable "aws_region" {
   type        = string
   description = "AWS Region"
-  default = "us-east-1"
+  default = "ap-south-1"
 }
 
 variable "aws_cloudwatch_retention_in_days" {
@@ -46,7 +46,7 @@ variable "route53_zone_id" {
 
 variable "bucket_name" {
   type = string
-  default = "leadsigma-terraform-state.tfstate"  
+  default = "mybuckflow"  
   description = "backend bucket for state file"
 }
 

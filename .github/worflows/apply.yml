@@ -1,0 +1,101 @@
+name: "Deploy infra to staging"
+run-name:  infra setup of LeadSigma-Services
+
+on:
+  workflow_dispatch:
+    branches:
+      - "main"
+    
+permissions:
+      id-token: write # This is required for aws oidc connection
+      contents: read # This is required for actions/checkout
+      pull-requests: write # This is required for gh bot to comment PR
+
+env:
+  AWS_REGION: var.aws_region
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: .
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v3
+
+      - name: Create config.tf file
+        run: |
+          cat <<EOL > config.tf
+
+          terraform {
+
+            backend "s3" {
+
+            bucket  =  var.bucket_name
+
+            encrypt = true
+
+            key 	= var.bucket_key
+
+            region  = var.aws_region
+
+            }
+          
+            required_providers {
+
+            aws = {
+
+              source  = "hashicorp/aws"
+
+              version = "~> 5.23.1"
+
+            }
+
+            }
+
+          }
+          
+          provider "aws" {
+
+            region = var.aws_region
+
+          }
+          
+          EOL
+          
+          echo "Terraform configuration file created: config.tf"
+
+      - name: Configure AWS credentials from AWS account
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::238573859336:role/OIDC-deployment
+          aws-region: var.aws_region
+          role-session-name: OIDC-deployment
+          
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.7.4     
+
+      - name: Terraform Init
+        id: init
+        env:
+          AWS_BUCKET_NAME: var.bucket_name
+          AWS_BUCKET_KEY_NAME: var.bucket_key
+        run: terraform init 
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color    
+
+      - name: Terraform Plan
+        id: plan
+        run: |
+          terraform plan -refresh=false  -no-color -out out.plan
+        continue-on-error: false
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -input=false  
+
