@@ -38,7 +38,7 @@ resource "aws_ecs_task_definition" "aws-ecs-task-1" {
 container_definitions = jsonencode([
    {
      name      = "${var.app_name}-${var.app_environment}-container-1"
-     image     =  "590183913538.dkr.ecr.eu-north-1.amazonaws.com/nginx"
+     image     =  "238573859336.dkr.ecr.ap-south-1.amazonaws.com/nginx:latest"
      cpu       = 512
      memory    = 1024
      essential = true
@@ -93,7 +93,7 @@ resource "aws_ecs_task_definition" "aws-ecs-task-2" {
 container_definitions = jsonencode([
    {
      name      = "${var.app_name}-${var.app_environment}-container-2"
-     image     =  "590183913538.dkr.ecr.eu-north-1.amazonaws.com/nginx"
+     image     =  "238573859336.dkr.ecr.ap-south-1.amazonaws.com/nginx:latest"
      cpu       = 512
      memory    = 1024
      essential = true
