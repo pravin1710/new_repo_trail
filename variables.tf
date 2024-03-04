@@ -44,14 +44,3 @@ variable "route53_zone_id" {
   default = "Z00720392J3FWBMEHGJQ1"  
 }
 
-variable "bucket_name" {
-  type = string
-  default = "mybuckflow"  
-  description = "backend bucket for state file"
-}
-
-variable "bucket_key" {
-  default = "stateterraform_state.tfstate"
-  description = "key value for backend bucket"
-  
-}
