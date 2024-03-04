@@ -30,13 +30,13 @@ jobs:
 
             backend "s3" {
 
-            bucket  =  var.bucket_name
+            bucket  =  ${{ secrets.AWS_S3_BUCKET }}
 
             encrypt = true
 
-            key 	= var.bucket_key
+            key 	= ${{ secrets.AWS_S3_KEY }}
 
-            region  = var.aws_region
+            region  = ap-south-1
 
             }
           
@@ -56,7 +56,7 @@ jobs:
           
           provider "aws" {
 
-            region = var.aws_region
+            region = ap-south-1
 
           }
           
@@ -79,8 +79,8 @@ jobs:
       - name: Terraform Init
         id: init
         env:
-          AWS_BUCKET_NAME: var.bucket_name
-          AWS_BUCKET_KEY_NAME: var.bucket_key
+          AWS_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET }}
+          AWS_BUCKET_KEY_NAME: ${{ secrets.AWS_S3_KEY }}
         run: terraform init 
 
       - name: Terraform Validate
