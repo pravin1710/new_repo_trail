@@ -106,45 +106,45 @@ resource "aws_lb_listener_rule" "listener-1" {
   }
 }
 
-resource "aws_lb_listener_rule" "listener-2" {
-  listener_arn = aws_lb_listener.listener-1.arn
+# resource "aws_lb_listener_rule" "listener-2" {
+#   listener_arn = aws_lb_listener.listener-1.arn
 
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.target_group_2.arn
-  }
+#   action {
+#     type             = "forward"
+#     target_group_arn = aws_lb_target_group.target_group_2.arn
+#   }
 
 
-  condition {
-    path_pattern {
-      values = ["/wor/*"]
-    }
-  }
-}
+#   condition {
+#     path_pattern {
+#       values = ["/wor/*"]
+#     }
+#   }
+# }
 
 
 ######
-resource "aws_lb_target_group" "target_group_2" {
-  name        = "${var.app_name}-${var.app_environment}-tg2"
-  port        = 80
-  protocol    = "HTTP"
-  vpc_id      = aws_vpc.aws-vpc.id
-  target_type = "ip"
+# resource "aws_lb_target_group" "target_group_2" {
+#   name        = "${var.app_name}-${var.app_environment}-tg2"
+#   port        = 80
+#   protocol    = "HTTP"
+#   vpc_id      = aws_vpc.aws-vpc.id
+#   target_type = "ip"
 
-  health_check {
-    healthy_threshold   = "3"
-    interval            = "300"
-    protocol            = "HTTP"
-    matcher             = "200"
-    timeout             = "3"
-    unhealthy_threshold = "2"
-  }
+#   health_check {
+#     healthy_threshold   = "3"
+#     interval            = "300"
+#     protocol            = "HTTP"
+#     matcher             = "200"
+#     timeout             = "3"
+#     unhealthy_threshold = "2"
+#   }
 
-  tags = {
-    Name        = "${var.app_name}-lb-tg2"
-    Environment = var.app_environment
-  }
-}
+#   tags = {
+#     Name        = "${var.app_name}-lb-tg2"
+#     Environment = var.app_environment
+#   }
+# }
 
 
 
