@@ -68,7 +68,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::238573859336:role/OIDC-deployment
-          aws-region: var.aws_region
+          aws-region: ap-south-1
           role-session-name: OIDC-deployment
           
       - name: Setup Terraform
