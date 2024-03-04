@@ -1,4 +1,4 @@
-name: "Deploy infra to staging"
+name: "Destroy infra of staging"
 run-name:  infra setup of LeadSigma-Services
 
 on:

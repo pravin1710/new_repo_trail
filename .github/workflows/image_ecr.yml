@@ -1,0 +1,61 @@
+name: image setup and deployment us-east-1
+run-name: Single ${{ github.event.inputs.image }} image to ecr ${{ github.event.inputs.envt }}
+
+on: 
+  workflow_dispatch:
+    branches:
+      - 'main'
+    inputs:
+      envt:
+        type: choice
+        description: "Select Environment:"
+        required: true
+        options:
+          - staging
+      image:
+        type: choice
+        description: "Select service for which image will be created:"
+        required: true
+        options:
+          - service-1 ##langchain/calendar
+
+permissions:
+  id-token: write
+  contents: write    # This is required for actions/checkout@v1
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.envt }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - if: ${{ github.event.inputs.envt == 'staging' }}  
+        name: Configure AWS Credentials for dev
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ap-south-1
+          role-to-assume: arn:aws:iam::238573859336:role/OIDC-deployment
+          role-session-name: OIDC-deployment
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+
+      - if: ${{ github.event.inputs.image == 'nginx' }}   
+        name: Build, tag, and push image to Amazon ECR backend
+        id: build-image-backend
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+          ECR_REPOSITORY: nginx
+        run: |
+          # Build a docker container and
+          # push it to ECR so that it can
+          # be deployed to ECS.
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f ./Dockerfile .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"   
+
