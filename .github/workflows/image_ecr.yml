@@ -48,7 +48,7 @@ jobs:
         name: Build, tag, and push image to Amazon ECR backend
         id: build-image-backend
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REGISTRY: ${{ secrets.login_ecr }}
           IMAGE_TAG: ${{ github.sha }}
           ECR_REPOSITORY: nginx
         run: |
