@@ -74,7 +74,14 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: 1.7.4     
+          terraform_version: 1.7.4  
+          
+      - name: Terraform Init
+        id: init
+        env:
+            AWS_BUCKET_NAME: "mybuckflow"
+            AWS_BUCKET_KEY_NAME: "stateterraform_state.tfstate"
+        run: terraform init 
 
       - name: Terraform Destroy
         run: terraform destroy
